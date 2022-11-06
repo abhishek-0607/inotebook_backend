@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const URL =
-  "mongodb+srv://ab360:mongo2244@cluster0.ntjha.mongodb.net/inotebook";
+require("dotenv").config();
+const url = process.env.URL;
 const connect = () => {
-  return mongoose.connect(URL);
+  return mongoose.connect(url);
 };
 module.exports = connect;
