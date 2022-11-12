@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const fetchUser = async (req, res, next) => {
+const fetchUser = (req, res, next) => {
   //get the user from jwt token and add id to req object
 
   const token = req.header("auth-token");
@@ -11,8 +11,8 @@ const fetchUser = async (req, res, next) => {
     });
   }
   try {
-    const string = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = string.user;
+    const userId = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = userId;
     next();
   } catch (e) {
     res.status(401).send({
