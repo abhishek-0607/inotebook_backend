@@ -4,9 +4,10 @@ const User = require("../models/user");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const fetchUser = require("../middlewares/fetchUser");
 require("dotenv").config();
 
-//create a user using: POST "/api/auth/"
+//create a user using: POST "/api/auth/"  (REGISTER A USER)
 const createUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -45,6 +46,7 @@ router.post(
   createUser
 );
 
+//create a user using: POST "/api/auth/"  (LOGIN A USER)
 const loginUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -78,5 +80,18 @@ router.post(
   ],
   loginUser
 );
+
+// get USER DETAILS using: POST "/api/auth/getuser". LOGIN REQUIRED
+const getUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId).select("-password");
+    res.status(200).send(user);
+  } catch (e) {
+    res.status(500).send({ e: "user is not logged in" });
+  }
+};
+
+router.post("/getuser", fetchUser, getUser);
 
 module.exports = router;
