@@ -84,11 +84,11 @@ router.post(
 // get USER DETAILS using: POST "/api/auth/getuser". LOGIN REQUIRED
 const getUser = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.userId;
     const user = await User.findById(userId).select("-password");
     res.status(200).send(user);
   } catch (e) {
-    res.status(500).send({ e: "user is not logged in" });
+    res.status(500).send({ message: e.message, status: "failed" });
   }
 };
 
